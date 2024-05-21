@@ -6,15 +6,6 @@ This Python script is designed to answer questions using OpenAI's GPT-4o model. 
 ## Dependencies
 The script uses the following Python libraries which you can load from the requirements.txt file:
 
-pandas
-os
-openai
-numpy
-typing
-scipy
-redis
-pickle
-
 `pip install -r requirements.txt`
 
 ## Setup
