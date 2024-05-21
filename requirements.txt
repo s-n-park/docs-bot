@@ -1,0 +1,11 @@
+pandas
+numpy
+scipy
+gunicorn
+flask
+scipy
+gunicorn
+flask
+openai
+redis
+pickle

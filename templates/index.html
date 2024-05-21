@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ask a Question</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.1/showdown.min.js"></script>
+    <style>
+        /* Add this CSS for the loading spinner */
+        .loader {
+            border: 8px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 8px solid #3498db;
+            width: 8px;
+            height: 8px;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <form id="query-form">
+        <label for="openai_key">OpenAI Key:</label><br>
+        <input type="text" id="openai_key" name="openai_key"><br>
+        <label for="question">Question:</label><br>
+        <input type="text" id="question" name="question"><br>
+        <input type="submit" value="Submit">
+    </form>
+    <div id="loader" class="loader" style="display: none;"></div> <!-- Add this line for the loading spinner -->
+    <div id="answer"></div>
+
+    <script>
+    $(document).ready(function(){
+        var converter = new showdown.Converter(); // Create a new showdown converter
+        $("#query-form").on("submit", function(event){
+            event.preventDefault();
+            $("#loader").show(); // Show the loading spinner when the form is submitted
+            $.ajax({
+                url: '/query',
+                type: 'post',
+                data: $(this).serialize(),
+                success: function(data) {
+                    $("#loader").hide(); // Hide the loading spinner when the response is received
+                    var html = converter.makeHtml(data.response); // Convert the response from Markdown to HTML
+                    $("#answer").html(html); // Display the HTML in the answer div
+                }
+            });
+        });
+    });
+    </script>
+</body>
+</html>
