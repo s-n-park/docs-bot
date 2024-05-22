@@ -7,6 +7,9 @@ from scipy import spatial
 import redis
 import pickle
 
+# Global variable to store the dataset
+df = None
+
 def initialize_client(openai_key: str):
     # set environment key
     os.environ['OPENAI_API_KEY'] = openai_key
@@ -86,12 +89,16 @@ def answer_question(client,df, model="gpt-4o", question="", size="ada", debug=Fa
     articles = '\n'.join('* [' + url + '](' + url + ')' for url in relevant_articles['url'].tolist())
     if response.choices[0].message.content.strip():
         return response.choices[0].message.content.strip() + "\n\nSource:\n" + articles
+        # return response.to_json() # OPTIONAL
     else:
         return "I'm not sure the answer, but here are links to relevant documentation:\n" + articles
 
 def get_answer(openai_key: str, question: str) -> str:
-    file_name = 'doc_text_embeddings_3_large.csv'
-    df = get_embeddings(file_name,use_redis=True)
+    global df
+    # Load the dataset only if it's not already loaded
+    if df is None:
+        file_name = 'doc_text_embeddings_3_large.csv'
+        df = get_embeddings(file_name,use_redis=False)
     client = initialize_client(openai_key)
     answer = answer_question(client, df, question=question)
     return answer

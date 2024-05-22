@@ -1,8 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from main import get_answer
 
-# Import logic from embeddings.ipynb
-
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
