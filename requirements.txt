@@ -6,6 +6,7 @@ flask
 scipy
 gunicorn
 flask
+flask_cors
 openai
 redis
 pickle
